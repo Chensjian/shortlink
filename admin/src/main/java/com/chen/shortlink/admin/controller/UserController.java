@@ -85,7 +85,7 @@ public class UserController {
      * @param token
      * @return
      */
-    @PostMapping("/api/short-link/v1/user/login")
+    @PostMapping("/api/short-link/v1/user/logout")
     public Result logout(@RequestParam(required = false) String token){
         userService.logout(token);
         return Results.success();
