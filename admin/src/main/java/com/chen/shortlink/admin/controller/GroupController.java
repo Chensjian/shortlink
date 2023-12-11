@@ -3,12 +3,10 @@ package com.chen.shortlink.admin.controller;
 import com.chen.shortlink.admin.common.convention.result.Result;
 import com.chen.shortlink.admin.common.convention.result.Results;
 import com.chen.shortlink.admin.dto.req.GroupAddReqDTO;
+import com.chen.shortlink.admin.dto.req.GroupUpdateReqDTO;
 import com.chen.shortlink.admin.service.GroupService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,4 +33,11 @@ public class GroupController {
     public Result listGroup(){
         return Results.success(groupService.listGroup());
     }
+
+    @PutMapping("/api/short-link/admin/v1/group")
+    public Result updateGroup(@RequestBody GroupUpdateReqDTO groupUpdateReqDTO){
+        groupService.updateGroup(groupUpdateReqDTO);
+        return Results.success();
+    }
+
 }
