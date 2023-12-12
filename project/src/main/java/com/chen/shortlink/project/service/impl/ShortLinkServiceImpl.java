@@ -2,13 +2,16 @@ package com.chen.shortlink.project.service.impl;
 
 import cn.hutool.core.text.StrBuilder;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chen.shortlink.project.common.convention.exception.ClientException;
 import com.chen.shortlink.project.dao.entity.ShortLinkDo;
 import com.chen.shortlink.project.dao.mapper.ShortLinkMapper;
 import com.chen.shortlink.project.dto.req.ShortLinkAddReqDTO;
+import com.chen.shortlink.project.dto.req.ShortLinkPageReqDTO;
 import com.chen.shortlink.project.dto.resp.ShortLinkAddRespDTO;
+import com.chen.shortlink.project.dto.resp.ShortLinkPageRespDTO;
 import com.chen.shortlink.project.service.ShortLinkService;
 import com.chen.shortlink.project.util.BeanUtil;
 import com.chen.shortlink.project.util.HashUtil;
@@ -39,6 +42,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                 .domain(shortLinkAddReqDTO.getDomain())
                 .originUrl(shortLinkAddReqDTO.getOriginUrl())
                 .gid(shortLinkAddReqDTO.getGid())
+                .favicon(shortLinkAddReqDTO.getFavicon())
                 .createType(shortLinkAddReqDTO.getCreateType())
                 .validDateType(shortLinkAddReqDTO.getValidDateType())
                 .validDate(shortLinkAddReqDTO.getValidDate())
@@ -65,6 +69,16 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                 .fullShortUrl(shortLinkDo.getFullShortUrl())
                 .gid(shortLinkAddReqDTO.getGid())
                 .build();
+    }
+
+    @Override
+    public IPage<ShortLinkPageRespDTO> pageShortLink(ShortLinkPageReqDTO shortLinkPageReqDTO) {
+        LambdaQueryWrapper<ShortLinkDo> queryWrapper = Wrappers.lambdaQuery(ShortLinkDo.class)
+                .eq(ShortLinkDo::getGid, shortLinkPageReqDTO.getGid())
+                .eq(ShortLinkDo::getEnableStatus, 0)
+                .eq(ShortLinkDo::getDelFlag, 0);
+         IPage<ShortLinkDo> resultPage = baseMapper.selectPage(shortLinkPageReqDTO, queryWrapper);
+         return resultPage.convert(item->BeanUtil.convert(item, ShortLinkPageRespDTO.class));
     }
 
     private String generateSuffix(ShortLinkAddReqDTO shortLinkAddReqDTO){

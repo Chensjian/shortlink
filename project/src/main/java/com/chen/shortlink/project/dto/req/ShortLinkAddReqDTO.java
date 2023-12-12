@@ -23,6 +23,11 @@ public class ShortLinkAddReqDTO {
     private String gid;
 
     /**
+     * 分组图标
+     */
+    private String favicon;
+
+    /**
      * 创建类型 0:接口创建 1:控制台创建
      */
     private int createType;
