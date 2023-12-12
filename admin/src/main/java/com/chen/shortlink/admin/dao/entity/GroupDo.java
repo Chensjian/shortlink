@@ -12,7 +12,7 @@ import java.util.Date;
  */
 @Data
 @TableName("t_group")
-public class GroupDo {
+public class GroupDo extends BaseDo {
 
 
     @TableId(type = IdType.AUTO)
@@ -27,23 +27,20 @@ public class GroupDo {
     private String gid;
 
     /**
+     * 分组名称
+     */
+    private String name;
+
+    /**
     * 创建分组用户名
     */
     private String username;
 
     /**
-    * 创建时间
-    */
-    private Date createTime;
+     * 分组排序
+     */
+    private Integer sortOrder;
 
-    /**
-    * 修改时间
-    */
-    private Date updateTime;
 
-    /**
-    * 删除标识 0：未删除 1：已删除
-    */
-    private int delFlag;
 
 }

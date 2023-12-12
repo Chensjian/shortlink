@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Data
 @TableName(value = "t_user")
-public class UserDo {
+public class UserDo extends BaseDo{
 
     /**
      * id
@@ -45,21 +45,5 @@ public class UserDo {
      */
     private Long deletionTime;
 
-    /**
-     * 创建时间
-     */
-    @TableField(fill = FieldFill.INSERT)
-    private Date createTime;
 
-    /**
-     * 修改时间
-     */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Date updateTime;
-
-    /**
-     * 删除标识 0：未删除 1：已删除
-     */
-    @TableField(fill = FieldFill.INSERT)
-    private Integer delFlag;
 }

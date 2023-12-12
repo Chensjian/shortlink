@@ -11,4 +11,6 @@ import com.chen.shortlink.project.dto.resp.ShortLinkAddRespDTO;
 public interface ShortLinkService extends IService<ShortLinkDo> {
 
     ShortLinkAddRespDTO addShortLink(ShortLinkAddReqDTO shortLinkAddReqDTO);
+
+
 }

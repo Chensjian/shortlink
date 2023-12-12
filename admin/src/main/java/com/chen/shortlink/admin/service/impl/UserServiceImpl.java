@@ -104,7 +104,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDo> implements 
         UserLoginRespDTO userLoginRespDTO = new UserLoginRespDTO();
         userLoginRespDTO.setToken(token);
         userLoginRespDTO.setUserInfo(userInfoDTO);
-        stringRedisTemplate.opsForValue().set(token, JSONUtil.toJsonStr(userInfoDTO),30, TimeUnit.MINUTES);
+        stringRedisTemplate.opsForValue().set(token, JSONUtil.toJsonStr(userInfoDTO),30, TimeUnit.DAYS);
         return userLoginRespDTO;
     }
 
