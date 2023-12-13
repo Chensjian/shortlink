@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chen.shortlink.project.common.convention.exception.ClientException;
 import com.chen.shortlink.project.common.enums.VailDateTypeEnum;
 import com.chen.shortlink.project.dao.entity.ShortLinkDo;
+import com.chen.shortlink.project.dao.entity.ShortLinkGotoDO;
 import com.chen.shortlink.project.dao.mapper.ShortLinkMapper;
 import com.chen.shortlink.project.dto.req.ShortLinkAddReqDTO;
 import com.chen.shortlink.project.dto.req.ShortLinkPageReqDTO;
@@ -17,6 +18,7 @@ import com.chen.shortlink.project.dto.req.ShortLinkUpdateReqDTO;
 import com.chen.shortlink.project.dto.resp.ShortLinkAddRespDTO;
 import com.chen.shortlink.project.dto.resp.ShortLinkGroupCountQueryRespDTO;
 import com.chen.shortlink.project.dto.resp.ShortLinkPageRespDTO;
+import com.chen.shortlink.project.service.ShortLinkGotoService;
 import com.chen.shortlink.project.service.ShortLinkService;
 import com.chen.shortlink.project.util.BeanUtil;
 import com.chen.shortlink.project.util.HashUtil;
@@ -41,6 +43,7 @@ import static com.chen.shortlink.project.common.enums.ShortLinkErrorEnums.*;
 public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLinkDo> implements ShortLinkService {
 
     private final RBloomFilter<String> shortLinkCreateBloomFilter;
+    private final ShortLinkGotoService shortLinkGotoService;
 
     @Override
     public ShortLinkAddRespDTO addShortLink(ShortLinkAddReqDTO shortLinkAddReqDTO) {
@@ -65,8 +68,13 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
 
         shortLinkDo.setFullShortUrl(fullShortUrl);
         shortLinkDo.setShortUrl(suffix);
+        ShortLinkGotoDO linkGotoDO = ShortLinkGotoDO.builder()
+                .gid(shortLinkAddReqDTO.getGid())
+                .fullShortUrl(fullShortUrl)
+                .build();
         try{
             baseMapper.insert(shortLinkDo);
+            shortLinkGotoService.save(linkGotoDO);
         }catch (DuplicateKeyException e){
             log.warn("短链接：{} 重复入库",fullShortUrl);
             throw new ClientException(SHORT_ADD_REPEAT_ERROR);
