@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.redisson.api.RBloomFilter;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -70,7 +71,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDo> implements 
                 throw new ClientException(USER_SAVE_FAIL);
             }
             userRegisterCachePenetrationBloomFilter.add(userRegisterReqDTO.getUsername());
-        }finally {
+        }catch (DuplicateKeyException e){
+            throw new ClientException(USER_NAME_EXIST);
+        }
+        finally {
             lock.unlock();
         }
 
