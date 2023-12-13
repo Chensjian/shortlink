@@ -1,4 +1,4 @@
-package com.chen.shortlink.admin.remote.resp;
+package com.chen.shortlink.admin.remote.dto.resp;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

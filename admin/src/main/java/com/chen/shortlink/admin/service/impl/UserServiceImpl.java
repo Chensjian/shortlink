@@ -5,14 +5,17 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chen.shortlink.admin.common.convention.exception.ClientException;
+import com.chen.shortlink.admin.dao.entity.GroupDo;
 import com.chen.shortlink.admin.dao.entity.UserDo;
 import com.chen.shortlink.admin.dao.mapper.UserMapper;
+import com.chen.shortlink.admin.dto.req.GroupAddReqDTO;
 import com.chen.shortlink.admin.dto.req.UserLonginReqDTO;
 import com.chen.shortlink.admin.dto.req.UserRegisterReqDTO;
 import com.chen.shortlink.admin.dto.req.UserUpdateReqDTO;
 import com.chen.shortlink.admin.dto.resp.UserInfoDTO;
 import com.chen.shortlink.admin.dto.resp.UserLoginRespDTO;
 import com.chen.shortlink.admin.dto.resp.UserRespDTO;
+import com.chen.shortlink.admin.service.GroupService;
 import com.chen.shortlink.admin.service.UserService;
 import com.chen.shortlink.admin.util.BeanUtil;
 import com.chen.shortlink.admin.util.JWTUtil;
@@ -39,6 +42,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDo> implements 
     private final RBloomFilter<String> userRegisterCachePenetrationBloomFilter;
     private final RedissonClient redissonClient;
     private final StringRedisTemplate stringRedisTemplate;
+    private final GroupService groupService;
 
     @Override
     public UserRespDTO getUserByUsername(String username) {
@@ -71,10 +75,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDo> implements 
                 throw new ClientException(USER_SAVE_FAIL);
             }
             userRegisterCachePenetrationBloomFilter.add(userRegisterReqDTO.getUsername());
+            GroupAddReqDTO groupAddReqDTO = GroupAddReqDTO
+                    .builder()
+                    .name("默认分组")
+                    .sortOrder(0)
+                    .build();
+            groupService.saveGroup(userRegisterReqDTO.getUsername(),groupAddReqDTO);
         }catch (DuplicateKeyException e){
             throw new ClientException(USER_NAME_EXIST);
-        }
-        finally {
+        }finally {
             lock.unlock();
         }
 
