@@ -33,7 +33,7 @@ public class ShortLinkController {
      * @param shortLinkPageReqDTO
      * @return
      */
-    @GetMapping("/api/short-link/admin/v1/page")
+    @GetMapping("/api/short-link/v1/page")
     public Result pageShortLink(ShortLinkPageReqDTO shortLinkPageReqDTO){
         return Results.success(shortLinkService.pageShortLink(shortLinkPageReqDTO));
     }
