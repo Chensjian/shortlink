@@ -4,6 +4,7 @@ import com.chen.shortlink.project.common.convention.result.Result;
 import com.chen.shortlink.project.common.convention.result.Results;
 import com.chen.shortlink.project.dto.req.ShortLinkAddReqDTO;
 import com.chen.shortlink.project.dto.req.ShortLinkPageReqDTO;
+import com.chen.shortlink.project.dto.req.ShortLinkUpdateReqDTO;
 import com.chen.shortlink.project.dto.resp.ShortLinkAddRespDTO;
 import com.chen.shortlink.project.dto.resp.ShortLinkGroupCountQueryRespDTO;
 import com.chen.shortlink.project.service.ShortLinkService;
@@ -46,4 +47,14 @@ public class ShortLinkController {
         return Results.success(shortLinkService.listGroupShortLinkCount(requestParam));
     }
 
+    /**
+     *  修改短链接
+     * @param shortLinkAddReqDTO 修改短链接参数
+     * @return
+     */
+    @PostMapping("/api/short-link/v1/update")
+    public Result updateShortLink(@RequestBody ShortLinkUpdateReqDTO shortLinkAddReqDTO){
+        shortLinkService.updateShortLink(shortLinkAddReqDTO);
+        return Results.success();
+    }
 }

@@ -5,7 +5,8 @@ import com.chen.shortlink.project.common.convention.errorcode.IErrorCode;
 public enum ShortLinkErrorEnums implements IErrorCode {
 
     SHORT_ADD_ERROR("C000200","短链接频繁创建，请稍后再试"),
-    SHORT_ADD_REPEAT_ERROR("C000201","短链接生成重复")
+    SHORT_ADD_REPEAT_ERROR("C000201","短链接生成重复"),
+    SHORT_NOT_EXIST("C000202","短链接不存在")
     ;
 
     private final String code;

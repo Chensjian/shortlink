@@ -83,5 +83,10 @@ public class ShortLinkDo extends BaseDo  {
      */
     private String description;
 
+    /**
+     * 删除时间
+     */
+    private Long delTime;
+
 
 }
