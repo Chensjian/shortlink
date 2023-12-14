@@ -46,6 +46,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -239,7 +240,8 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                     .eq(ShortLinkDo::getDelFlag, 0)
                     .eq(ShortLinkDo::getEnableStatus, 0);
             ShortLinkDo shortLinkDo = baseMapper.selectOne(shortLinkDoLambdaQueryWrapper);
-            if (shortLinkDo == null) {
+
+            if (shortLinkDo == null||(shortLinkDo.getValidDate()!=null&&shortLinkDo.getValidDate().before(new Date()))) {
                 stringRedisTemplate.opsForValue().set(String.format(GOTO_IS_NULL_SHORT_LINK_KEY, fullShortUrl),"-",30, TimeUnit.SECONDS);
                 sendRedirect(response, "/page/notfound");
                 return;
