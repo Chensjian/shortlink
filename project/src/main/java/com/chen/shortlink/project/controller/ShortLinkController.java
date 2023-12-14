@@ -8,6 +8,8 @@ import com.chen.shortlink.project.dto.req.ShortLinkUpdateReqDTO;
 import com.chen.shortlink.project.dto.resp.ShortLinkAddRespDTO;
 import com.chen.shortlink.project.dto.resp.ShortLinkGroupCountQueryRespDTO;
 import com.chen.shortlink.project.service.ShortLinkService;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,5 +58,13 @@ public class ShortLinkController {
     public Result updateShortLink(@RequestBody ShortLinkUpdateReqDTO shortLinkAddReqDTO){
         shortLinkService.updateShortLink(shortLinkAddReqDTO);
         return Results.success();
+    }
+
+    /**
+     * 短链接跳转原始链接
+     */
+    @GetMapping("/{short-url}")
+    public void restoreUrl(@PathVariable("short-url") String shortUrl, ServletRequest request, ServletResponse response) {
+        shortLinkService.restoreUrl(shortUrl, request, response);
     }
 }
