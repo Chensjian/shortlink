@@ -31,7 +31,11 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.redisson.api.RBloomFilter;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -40,6 +44,8 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -70,7 +76,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                 .domain(shortLinkAddReqDTO.getDomain())
                 .originUrl(shortLinkAddReqDTO.getOriginUrl())
                 .gid(shortLinkAddReqDTO.getGid())
-                .favicon(shortLinkAddReqDTO.getFavicon())
+                .favicon(getFavicon(shortLinkAddReqDTO.getOriginUrl()))
                 .createType(shortLinkAddReqDTO.getCreateType())
                 .validDateType(shortLinkAddReqDTO.getValidDateType())
                 .validDate(shortLinkAddReqDTO.getValidDate())
@@ -234,7 +240,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                     .eq(ShortLinkDo::getEnableStatus, 0);
             ShortLinkDo shortLinkDo = baseMapper.selectOne(shortLinkDoLambdaQueryWrapper);
             if (shortLinkDo == null) {
-                stringRedisTemplate.opsForValue().set(String.format(GOTO_IS_NULL_SHORT_LINK_KEY, fullShortUrl),"",30, TimeUnit.SECONDS);
+                stringRedisTemplate.opsForValue().set(String.format(GOTO_IS_NULL_SHORT_LINK_KEY, fullShortUrl),"-",30, TimeUnit.SECONDS);
                 sendRedirect(response, "/page/notfound");
                 return;
             }
@@ -272,5 +278,22 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @SneakyThrows
+    private String getFavicon(String url) {
+        URL targetUrl = new URL(url);
+        HttpURLConnection connection = (HttpURLConnection) targetUrl.openConnection();
+        connection.setRequestMethod("GET");
+        connection.connect();
+        int responseCode = connection.getResponseCode();
+        if (HttpURLConnection.HTTP_OK == responseCode) {
+            Document document = Jsoup.connect(url).get();
+            Element faviconLink = document.select("link[rel~=(?i)^(shortcut )?icon]").first();
+            if (faviconLink != null) {
+                return faviconLink.attr("abs:href");
+            }
+        }
+        return null;
     }
 }
