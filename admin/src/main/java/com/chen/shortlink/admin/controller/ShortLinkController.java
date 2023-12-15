@@ -1,9 +1,11 @@
 package com.chen.shortlink.admin.controller;
 
 import com.chen.shortlink.admin.common.convention.result.Result;
+import com.chen.shortlink.admin.common.convention.result.Results;
 import com.chen.shortlink.admin.remote.ShortLinkRemoteService;
 import com.chen.shortlink.admin.remote.dto.req.ShortLinkAddReqDTO;
 import com.chen.shortlink.admin.remote.dto.req.ShortLinkPageReqDTO;
+import com.chen.shortlink.admin.remote.dto.req.ShortLinkUpdateReqDTO;
 import com.chen.shortlink.admin.remote.dto.resp.ShortLinkAddRespDTO;
 import com.chen.shortlink.admin.remote.dto.resp.ShortLinkGroupCountQueryRespDTO;
 import org.springframework.web.bind.annotation.*;
@@ -42,5 +44,16 @@ public class ShortLinkController {
     @GetMapping("/api/short-link/admin/v1/count")
     public Result<List<ShortLinkGroupCountQueryRespDTO>> listGroupShortLinkCount(@RequestParam("requestParam") List<String> requestParam) {
         return shortLinkRemoteService.listGroupShortLinkCount(requestParam);
+    }
+
+    /**
+     *  修改短链接
+     * @param shortLinkAddReqDTO 修改短链接参数
+     * @return
+     */
+    @PutMapping("/api/short-link/admin/v1/update")
+    public Result updateShortLink(@RequestBody ShortLinkUpdateReqDTO shortLinkAddReqDTO){
+        shortLinkRemoteService.updateShortLink(shortLinkAddReqDTO);
+        return Results.success();
     }
 }
