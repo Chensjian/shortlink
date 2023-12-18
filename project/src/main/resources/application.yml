@@ -10,3 +10,8 @@ spring:
     redis:
       host: 127.0.0.1
       port: 6379
+
+short-link:
+  stats:
+    locale:
+      amap-key: 5b3345018d85c0fbc07283099b269bc1
