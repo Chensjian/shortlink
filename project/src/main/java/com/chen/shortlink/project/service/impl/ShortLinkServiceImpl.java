@@ -87,6 +87,7 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
     private final LinkDeviceStatsMapper linkDeviceStatsMapper;
     private final LinkNetworkStatsMapper linkNetworkStatsMapper;
     private final LinkAccessLogsMapper linkAccessLogsMapper;
+    private final LinkStatsTodayMapper linkStatsTodayMapper;
 
     @Value("${server.port}")
     private String serverPort;
@@ -107,6 +108,9 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                 .validDateType(shortLinkAddReqDTO.getValidDateType())
                 .validDate(shortLinkAddReqDTO.getValidDate())
                 .description(shortLinkAddReqDTO.getDescription())
+                .totalPv(0)
+                .totalUv(0)
+                .totalUip(0)
                 .delTime(0L)
                 .clickNum(0)
                 .build();
@@ -412,6 +416,17 @@ public class ShortLinkServiceImpl extends ServiceImpl<ShortLinkMapper, ShortLink
                 .user(uv.get())
                 .build();
         linkAccessLogsMapper.insert(linkAccessLogsDO);
+        baseMapper.incrementStats(gid, fullShortUrl, 1, uvFirstFlag.get() ? 1 : 0, uipFirstFlag ? 1 : 0);
+        LinkStatsTodayDTO linkStatsTodayDTO = LinkStatsTodayDTO.builder()
+                .todayPv(1)
+                .todayUv(uvFirstFlag.get()?1:0)
+                .todayUip(uipFirstFlag?1:0)
+                .fullShortUrl(fullShortUrl)
+                .gid(gid)
+                .date(date)
+                .build();
+        linkStatsTodayMapper.shortTodayLinkStat(linkStatsTodayDTO);
+
     }
 
     private String generateSuffix(ShortLinkAddReqDTO shortLinkAddReqDTO) {
