@@ -5,8 +5,32 @@ spring:
     # ShardingSphere 对 Driver 自定义，实现分库分表等隐藏逻辑
     driver-class-name: org.apache.shardingsphere.driver.ShardingSphereDriver
     # ShardingSphere 配置文件路径
-    url: jdbc:shardingsphere:classpath:shardingsphere-config.yaml
+    url: jdbc:shardingsphere:classpath:shardingsphere-config-prod.yaml
   data:
     redis:
       host: 127.0.0.1
       port: 6379
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        namespace: 634f4e71-ba53-4d2b-9b47-2023e2032c14
+      config:
+        server-addr: 127.0.0.1:8848 #Nacos服务配置中心地址
+        file-extension: yaml #指定yaml格式的配置
+  application:
+    name: short-link-admin
+  config:
+    import: nacos:short-link-admin-dev.yaml
+short-link:
+  group:
+    max-group-num: 20
+  flow-limit:
+    enable: true
+    time-window: 1
+    max-access-count: 30
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

@@ -1,5 +1,6 @@
 package com.chen.shortlink.admin.controller;
 
+import com.chen.shortlink.admin.annotation.MyLog;
 import com.chen.shortlink.admin.common.convention.result.Result;
 import com.chen.shortlink.admin.common.convention.result.Results;
 import com.chen.shortlink.admin.common.enums.UserErrorCodeEnum;

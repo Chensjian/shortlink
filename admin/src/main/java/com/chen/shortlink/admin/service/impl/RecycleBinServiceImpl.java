@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.chen.shortlink.admin.common.biz.user.UserContext;
 import com.chen.shortlink.admin.common.convention.exception.ClientException;
@@ -28,10 +29,10 @@ import java.util.stream.Collectors;
 public class RecycleBinServiceImpl implements RecycleBinService {
 
     private final GroupMapper groupMapper;
-    private final ShortLinkRemoteService shortLinkRemoteService = new ShortLinkRemoteService(){};
+    private final ShortLinkRemoteService shortLinkRemoteService;
 
     @Override
-    public Result<IPage<ShortLinkPageRespDTO>> pageRecycleBinShortLink(ShortLinkRecycleBinPageReqDTO shortLinkRecycleBinPageReqDTO) {
+    public Result<Page<ShortLinkPageRespDTO>> pageRecycleBinShortLink(ShortLinkRecycleBinPageReqDTO shortLinkRecycleBinPageReqDTO) {
         LambdaQueryWrapper<GroupDo> queryWrapper = Wrappers.lambdaQuery(GroupDo.class)
                 .eq(GroupDo::getUsername, UserContext.getUsername())
                 .eq(GroupDo::getDelFlag, 0);

@@ -1,5 +1,6 @@
 package com.chen.shortlink.project.dto.req;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
@@ -40,6 +41,7 @@ public class ShortLinkAddReqDTO {
     /**
      * 有效期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private Date validDate;
 
     /**

@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UrlTitleController {
 
-    private final ShortLinkRemoteService shortLinkRemoteService = new ShortLinkRemoteService(){};
+    private final ShortLinkRemoteService shortLinkRemoteService ;
+//    private final ShortLinkRemoteService shortLinkRemoteService = new ShortLinkRemoteService(){};
 
     /**
      * 根据 URL 获取对应网站的标题

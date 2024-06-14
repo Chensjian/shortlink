@@ -3,6 +3,7 @@ package com.chen.shortlink.project.dao.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.chen.shortlink.project.dao.entity.LinkBrowserStatsDO;
 import com.chen.shortlink.project.dao.entity.LinkDeviceStatsDO;
+import com.chen.shortlink.project.dto.req.ShortLinkGroupStatsReqDTO;
 import com.chen.shortlink.project.dto.req.ShortLinkStatsReqDTO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -30,4 +31,11 @@ public interface LinkDeviceStatsMapper extends BaseMapper<LinkDeviceStatsDO> {
             "and create_time between #{param.startDate} and #{param.endDate} " +
             "group by full_short_url,gid,device")
     List<Map<String,Object>> listDeviceStatsByShortLink(@Param("param") ShortLinkStatsReqDTO shortLinkStatsReqDTO);
+
+    @Select("select device ,sum(cnt) as cnt " +
+            "from t_link_device_stats " +
+            "where gid=#{param.gid} " +
+            "and create_time between #{param.startDate} and #{param.endDate} " +
+            "group by gid,device")
+    List<Map<String, Object>> groupListDeviceStatsByShortLink(@Param("param") ShortLinkGroupStatsReqDTO shortLinkGroupStatsReqDTO);
 }

@@ -16,7 +16,7 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LinkStatsTodayDTO extends BaseDo {
+public class LinkStatsTodayDO extends BaseDo {
 
     /**
      * id

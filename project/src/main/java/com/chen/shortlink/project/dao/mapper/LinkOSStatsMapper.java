@@ -2,6 +2,7 @@ package com.chen.shortlink.project.dao.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.chen.shortlink.project.dao.entity.LinkOSStatsDO;
+import com.chen.shortlink.project.dto.req.ShortLinkGroupStatsReqDTO;
 import com.chen.shortlink.project.dto.req.ShortLinkStatsReqDTO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -31,4 +32,11 @@ public interface LinkOSStatsMapper extends BaseMapper<LinkOSStatsDO> {
             "and create_time between #{param.startDate} and #{param.endDate} " +
             "group by full_short_url,gid,os")
     List<Map<String,Object>> listOsStatsByShortLink(@Param("param") ShortLinkStatsReqDTO shortLinkStatsReqDTO);
+
+    @Select("select os ,sum(cnt) as cnt " +
+            "from t_link_os_stats " +
+            "where gid=#{param.gid} " +
+            "and create_time between #{param.startDate} and #{param.endDate} " +
+            "group by gid,os")
+    List<Map<String, Object>> groupListOsStatsByShortLink(@Param("param") ShortLinkGroupStatsReqDTO shortLinkGroupStatsReqDTO);
 }

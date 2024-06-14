@@ -4,6 +4,7 @@ import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.chen.shortlink.admin.annotation.MyLog;
 import com.chen.shortlink.admin.common.convention.exception.ClientException;
 import com.chen.shortlink.admin.dao.entity.GroupDo;
 import com.chen.shortlink.admin.dao.entity.UserDo;
@@ -55,12 +56,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserDo> implements 
         return BeanUtil.convert(userDo,UserRespDTO.class);
     }
 
+    @MyLog(title = "用户模块",content = "根据用户名获取无脱敏的用户信息")
     @Override
     public Boolean hasUserName(String username) {
         return userRegisterCachePenetrationBloomFilter.contains(username);
     }
 
     @Override
+    @MyLog(title = "用户模块",content = "根据用户名获取无脱敏的用户信息")
     public void register(UserRegisterReqDTO userRegisterReqDTO) {
         if(hasUserName(userRegisterReqDTO.getUsername())){
             throw new ClientException(USER_NAME_EXIST);
